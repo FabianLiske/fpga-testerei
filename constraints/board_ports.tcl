@@ -15,8 +15,15 @@ proc emit_project_board_constraints {fh pins c emitted_ports_var} {
     emit_optional_board_port_constraint $fh $pins diff_100mhz_clk_n clk_100mhz_n BOARD emitted_ports
     emit_optional_clock_constraint $fh clk_100mhz_p $clk_period clk_100mhz
 
-    #puts $fh "## Project mapping: red user LED."
-    #puts $fh "## LED_IOSTANDARD=$led_iostandard; use LED_IOSTANDARD=NONE to omit it or override with e.g. LVCMOS33."
-    emit_optional_board_port_constraint $fh $pins GPIO_LED_R {led[0]} $led_iostandard emitted_ports
-    emit_optional_board_port_constraint $fh $pins GPIO_LED_G {led[1]} $led_iostandard emitted_ports
+    emit_optional_board_port_constraint $fh $pins GPIO_LED_R led_r $led_iostandard emitted_ports
+    emit_optional_board_port_constraint $fh $pins GPIO_LED_G led_g $led_iostandard emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_1_LED sfp_1_led $led_iostandard emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_2_LED sfp_2_led $led_iostandard emitted_ports
+
+    emit_optional_board_port_constraint $fh $pins SFP_1_MOD_DEF_0 sfp_1_mod_def_0 BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_2_MOD_DEF_0 sfp_2_mod_def_0 BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_1_LOS sfp_1_los BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_2_LOS sfp_2_los BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_1_TX_FAULT sfp_1_tx_fault BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_2_TX_FAULT sfp_2_tx_fault BOARD emitted_ports
 }
