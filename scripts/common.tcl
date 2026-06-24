@@ -16,10 +16,11 @@ proc repo_root {} {
 proc cfg {} {
     set root [env_default REPO_ROOT [repo_root]]
     set build [env_default BUILD [file join $root build default]]
+    set project_name [env_default PROJECT_NAME [file tail $root]]
     return [dict create \
         repo_root [file normalize $root] \
         build [file normalize $build] \
-        project_name as02mc04_template \
+        project_name $project_name \
         top [env_default TOP top] \
         part [env_default PART xcku3p-ffvb676-2-e] \
         board_part [env_default BOARD_PART tiferking.cn:as02mc04:part0:1.0] \
