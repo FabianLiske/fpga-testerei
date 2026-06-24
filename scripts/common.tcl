@@ -15,8 +15,9 @@ proc repo_root {} {
 
 proc cfg {} {
     set root [env_default REPO_ROOT [repo_root]]
-    set build [env_default BUILD [file join $root build default]]
     set project_name [env_default PROJECT_NAME [file tail $root]]
+    set default_build [file join [env_default HOME $root] build $project_name]
+    set build [env_default BUILD $default_build]
     return [dict create \
         repo_root [file normalize $root] \
         build [file normalize $build] \

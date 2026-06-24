@@ -6,7 +6,7 @@
 # Board-pin-to-RTL-port mappings live in constraints/board_ports.tcl.
 
 TOP := top
-BUILD := build/default
+BUILD = $(HOME)/build/$(PROJECT_NAME)
 
 BOARD_PART := tiferking.cn:as02mc04:part0:1.0
 PART := xcku3p-ffvb676-2-e

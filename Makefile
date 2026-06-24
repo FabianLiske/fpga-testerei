@@ -1,13 +1,13 @@
 VIVADO ?= vivado
 REPO_ROOT := $(abspath .)
 DEFAULT_PROJECT_NAME := $(notdir $(REPO_ROOT))
-BUILD ?= build/default
+PROJECT_NAME ?= $(DEFAULT_PROJECT_NAME)
+BUILD ?= $(HOME)/build/$(PROJECT_NAME)
 JOBS ?= 32
 TOP ?= top
 BOARD_PART ?= tiferking.cn:as02mc04:part0:1.0
 PART ?= xcku3p-ffvb676-2-e
 HW_FREQ ?= 1000000
-PROJECT_NAME ?= $(DEFAULT_PROJECT_NAME)
 BOARD_CONSTRAINTS ?= 1
 LED_IOSTANDARD ?= BOARD
 BOARD_AUTO_PORTS ?= 1
@@ -34,7 +34,7 @@ help:
 	  '  make reports        Regenerate reports from available runs' \
 	  '  make probe          Open Hardware Manager and list JTAG devices only' \
 	  '  make program        Volatile JTAG programming; requires CONFIRM=1' \
-	  '  make clean          Remove generated build/Vivado artifacts' \
+	  '  make clean          Remove configured BUILD directory and root Vivado artifacts' \
 	  '' \
 	  'Variables:' \
 	  '  VIVADO=$(VIVADO)' \
@@ -94,4 +94,4 @@ program: $(ABS_BUILD)
 	  -journal "$(ABS_BUILD)/logs/program.jou"
 
 clean:
-	rm -rf build .Xil *.jou *.log vivado*.str webtalk*.jou webtalk*.log usage_statistics_webtalk.*
+	rm -rf "$(ABS_BUILD)" .Xil *.jou *.log vivado*.str webtalk*.jou webtalk*.log usage_statistics_webtalk.*
