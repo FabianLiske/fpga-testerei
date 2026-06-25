@@ -15,14 +15,15 @@ proc repo_root {} {
 
 proc cfg {} {
     set root [env_default REPO_ROOT [repo_root]]
-    set build [env_default BUILD [file join $root build default]]
     set project_name [env_default PROJECT_NAME [file tail $root]]
+    set default_build [file join [env_default HOME $root] build $project_name]
+    set build [env_default BUILD $default_build]
     return [dict create \
         repo_root [file normalize $root] \
         build [file normalize $build] \
         project_name $project_name \
         top [env_default TOP top] \
-        part [env_default PART xcku3p-ffvb676-2-e] \
+        part [env_default PART xcku3p-ffvb676-1-e] \
         board_part [env_default BOARD_PART tiferking.cn:as02mc04:part0:1.0] \
         board_constraints [env_default BOARD_CONSTRAINTS 1] \
         led_iostandard [env_default LED_IOSTANDARD BOARD] \
