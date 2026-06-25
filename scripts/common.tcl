@@ -23,7 +23,7 @@ proc cfg {} {
         build [file normalize $build] \
         project_name $project_name \
         top [env_default TOP top] \
-        part [env_default PART xcku3p-ffvb676-2-e] \
+        part [env_default PART xcku3p-ffvb676-1-e] \
         board_part [env_default BOARD_PART tiferking.cn:as02mc04:part0:1.0] \
         board_constraints [env_default BOARD_CONSTRAINTS 1] \
         led_iostandard [env_default LED_IOSTANDARD BOARD] \

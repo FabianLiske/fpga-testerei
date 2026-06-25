@@ -6,7 +6,7 @@ BUILD ?= $(HOME)/build/$(PROJECT_NAME)
 JOBS ?= 32
 TOP ?= top
 BOARD_PART ?= tiferking.cn:as02mc04:part0:1.0
-PART ?= xcku3p-ffvb676-2-e
+PART ?= xcku3p-ffvb676-1-e
 HW_FREQ ?= 1000000
 BOARD_CONSTRAINTS ?= 1
 LED_IOSTANDARD ?= BOARD
@@ -21,13 +21,14 @@ PROJECT_XPR := $(ABS_BUILD)/project/$(PROJECT_NAME).xpr
 VIVADO_ENV := REPO_ROOT="$(REPO_ROOT)" BUILD="$(ABS_BUILD)" PROJECT_NAME="$(PROJECT_NAME)" TOP="$(TOP)" PART="$(PART)" BOARD_PART="$(BOARD_PART)" JOBS="$(JOBS)" HW_FREQ="$(HW_FREQ)" BOARD_CONSTRAINTS="$(BOARD_CONSTRAINTS)" LED_IOSTANDARD="$(LED_IOSTANDARD)" BOARD_AUTO_PORTS="$(BOARD_AUTO_PORTS)" BOARD_AUTO_IOSTANDARD="$(BOARD_AUTO_IOSTANDARD)"
 VIVADO_BATCH = cd "$(ABS_BUILD)" && env $(VIVADO_ENV) $(VIVADO) -mode batch
 
-.PHONY: help project gui synth impl bit reports probe program clean
+.PHONY: help project gui open synth impl bit reports probe program clean
 
 help:
 	@printf '%s\n' \
 	  'AS02MC04 Vivado template targets:' \
 	  '  make project        Create/update Vivado project under BUILD' \
 	  '  make gui            Open the generated project in Vivado GUI' \
+	  '  make open           Open existing Vivado project without regenerating it' \
 	  '  make synth          Run synthesis and write reports/checkpoint' \
 	  '  make impl           Run implementation and write reports/checkpoint' \
 	  '  make bit            Build bitstream into BUILD/output' \
@@ -59,6 +60,11 @@ project: $(ABS_BUILD)
 	  -journal "$(ABS_BUILD)/logs/create_project.jou"
 
 gui: project
+	cd "$(ABS_BUILD)" && $(VIVADO) -mode gui "$(PROJECT_XPR)" \
+	  -log "$(ABS_BUILD)/logs/gui.log" \
+	  -journal "$(ABS_BUILD)/logs/gui.jou"
+
+open: $(ABS_BUILD)
 	cd "$(ABS_BUILD)" && $(VIVADO) -mode gui "$(PROJECT_XPR)" \
 	  -log "$(ABS_BUILD)/logs/gui.log" \
 	  -journal "$(ABS_BUILD)/logs/gui.jou"

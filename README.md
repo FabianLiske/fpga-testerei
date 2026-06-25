@@ -37,7 +37,7 @@ BUILD ?= $(HOME)/build/$(PROJECT_NAME)
 JOBS ?= 32
 TOP ?= top
 BOARD_PART ?= tiferking.cn:as02mc04:part0:1.0
-PART ?= xcku3p-ffvb676-2-e
+PART ?= xcku3p-ffvb676-1-e
 HW_FREQ ?= 1000000
 BOARD_CONSTRAINTS ?= 1
 LED_IOSTANDARD ?= BOARD
@@ -55,7 +55,7 @@ JOBS := 32
 Beispiele:
 
 ```bash
-make bit PART=xcku3p-ffvb676-1-e JOBS=8
+make bit PART=xcku3p-ffvb676-2-e JOBS=8
 make gui BUILD=$HOME/build/fpga-debug
 make probe HW_FREQ=750000
 make project BOARD_CONSTRAINTS=0
@@ -83,7 +83,7 @@ Die Demo-Mappings in `constraints/board_ports.tcl` sind absichtlich optional. We
 
 ## Speedgrade `-1-e` vs `-2-e`
 
-Die Quellen sind nicht einheitlich: `TiferKing/as02mc04_hack` beschreibt im Board-File `xcku3p-ffvb676-2-e`, waehrend `dkozel/Alibaba-Cloud-FPGA` `xcku3p-ffvb676-1-e` nennt. Deshalb ist `PART` bewusst als Make-Variable vorgesehen. Der Default ist `xcku3p-ffvb676-2-e`, kann aber pro Karte überschrieben werden.
+Die Quellen sind nicht einheitlich: `TiferKing/as02mc04_hack` beschreibt im Board-File `xcku3p-ffvb676-2-e`, waehrend `dkozel/Alibaba-Cloud-FPGA` `xcku3p-ffvb676-1-e` nennt. Per AMD Device DNA wurde fuer diese Karte Speedgrade `1E` ermittelt. Deshalb ist `PART` bewusst als Make-Variable vorgesehen. Der Default ist `xcku3p-ffvb676-1-e`, kann aber pro Karte überschrieben werden.
 
 ## Constraints Und Offene Pinout-Punkte
 

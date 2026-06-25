@@ -9,7 +9,7 @@ TOP := top
 BUILD = $(HOME)/build/$(PROJECT_NAME)
 
 BOARD_PART := tiferking.cn:as02mc04:part0:1.0
-PART := xcku3p-ffvb676-2-e
+PART := xcku3p-ffvb676-1-e
 
 BOARD_CONSTRAINTS := 1
 LED_IOSTANDARD := BOARD

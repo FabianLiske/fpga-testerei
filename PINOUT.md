@@ -4,7 +4,7 @@ Source for `Pin Index`, `Name`, `IO Standard`, `Location`, `DRIVE`, `SLEW`, and
 `DQS_BIAS`:
 `/home/faba/.local/share/vivado/board-files/as02mc04_hack/as02mc04/1.0/part0_pins.xml`
 
-Source for `Bank`: Vivado 2025.2.1 device database for `xcku3p-ffvb676-2-e`.
+Source for `Bank`: Vivado 2025.2.1 device database for `xcku3p-ffvb676-1-e`.
 
 | Pin Index | Name | IO Standard | Location | Bank | Technical Notes | Usage Notes |
 | --- | --- | --- | --- | --- | --- | --- |
