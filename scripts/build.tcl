@@ -65,27 +65,41 @@ proc fail_on_timing {c} {
     }
 }
 
-proc synth_design_from_project {c} {
-    synth_design -top [dict get $c top] -part [dict get $c part]
+proc run_project_synthesis {c} {
+    reset_run synth_1
+    launch_runs synth_1 -jobs [dict get $c jobs]
+    wait_on_run synth_1
+    run_finished_ok synth_1
+    open_run synth_1 -name synth_1
     report_synth $c
+    close_design
 }
 
-proc implement_current_project {c} {
-    synth_design_from_project $c
-    opt_design
-    place_design
-    route_design
+proc run_project_implementation {c {to_bitstream 0}} {
+    if {$to_bitstream} {
+        launch_runs impl_1 -to_step write_bitstream -jobs [dict get $c jobs]
+    } else {
+        launch_runs impl_1 -jobs [dict get $c jobs]
+    }
+    wait_on_run impl_1
+    run_finished_ok impl_1
+    open_run impl_1 -name impl_1
     report_impl $c
     fail_on_drc $c
     fail_on_timing $c
 }
 
 proc write_template_bitstream {c} {
-    implement_current_project $c
+    run_project_implementation $c 1
     set output [file join [dict get $c build] output]
     ensure_dir $output
     set dst [file join $output "[dict get $c top].bit"]
-    write_bitstream -force $dst
+    set impl_dir [get_property DIRECTORY [get_runs impl_1]]
+    set bitstreams [glob_or_empty [file join $impl_dir *.bit]]
+    if {[llength $bitstreams] == 0} {
+        fail "Bitstream not found under $impl_dir."
+    }
+    file copy -force [lindex $bitstreams 0] $dst
     puts "Bitstream: $dst"
 }
 
@@ -118,8 +132,8 @@ open_template_project $c
 
 set stage [dict get $c stage]
 switch -- $stage {
-    synth { synth_design_from_project $c }
-    impl { implement_current_project $c }
+    synth { run_project_synthesis $c }
+    impl { run_project_synthesis $c; run_project_implementation $c 0 }
     bit { write_template_bitstream $c }
     reports { regenerate_reports $c }
     default { fail "Unknown STAGE=$stage" }

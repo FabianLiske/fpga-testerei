@@ -50,6 +50,9 @@ if {[llength $xdc_files] > 0} {
 set xci_files [glob_or_empty [file join $root ip *.xci]]
 if {[llength $xci_files] > 0} {
     add_files -fileset sources_1 $xci_files
+    foreach xci_file $xci_files {
+        generate_target all [get_files $xci_file]
+    }
 }
 
 update_compile_order -fileset sources_1
