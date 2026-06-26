@@ -19,4 +19,14 @@ proc emit_project_board_constraints {fh pins c emitted_ports_var} {
     #puts $fh "## LED_IOSTANDARD=$led_iostandard; use LED_IOSTANDARD=NONE to omit it or override with e.g. LVCMOS33."
     emit_optional_board_port_constraint $fh $pins GPIO_LED_R {led[0]} $led_iostandard emitted_ports
     emit_optional_board_port_constraint $fh $pins GPIO_LED_G {led[1]} $led_iostandard emitted_ports
+
+    emit_optional_board_port_constraint $fh $pins SFP_1_MOD_DEF_0 SFP_1_MOD_DEF_0 BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_1_TX_FAULT SFP_1_TX_FAULT BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_1_LOS SFP_1_LOS BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_1_LED SFP_1_LED BOARD emitted_ports
+
+    emit_optional_board_port_constraint $fh $pins SFP_2_MOD_DEF_0 SFP_2_MOD_DEF_0 BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_2_TX_FAULT SFP_2_TX_FAULT BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_2_LOS SFP_2_LOS BOARD emitted_ports
+    emit_optional_board_port_constraint $fh $pins SFP_2_LED SFP_2_LED BOARD emitted_ports
 }
