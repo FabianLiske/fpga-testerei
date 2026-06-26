@@ -124,15 +124,15 @@ proc rtl_files_for_ports {root} {
         [glob_or_empty [file join $root rtl *.v]]]
 }
 
-proc mark_rtl_port {ports_var name range} {
+proc mark_rtl_port {ports_var name range direction} {
     upvar $ports_var ports
-    dict set ports $name 1
+    dict set ports $name $direction
 
     if {[regexp {\[\s*([0-9]+)\s*:\s*([0-9]+)\s*\]} $range -> left right]} {
         set lo [expr {$left < $right ? $left : $right}]
         set hi [expr {$left > $right ? $left : $right}]
         for {set i $lo} {$i <= $hi} {incr i} {
-            dict set ports "${name}\[$i\]" 1
+            dict set ports "${name}\[$i\]" $direction
         }
     }
 }
@@ -212,7 +212,7 @@ proc parse_ansi_module_ports {text top} {
             set range $found_range
         }
         if {[regexp {([A-Za-z_][A-Za-z0-9_$]*)\s*$} $rest -> name]} {
-            mark_rtl_port ports $name $range
+            mark_rtl_port ports $name $range $direction
         }
     }
 
@@ -241,11 +241,27 @@ proc port_exists {port} {
     return [expr {[llength [get_ports -quiet $port]] > 0}]
 }
 
+proc port_direction {port} {
+    if {[info exists ::as02mc04_top_ports] && [dict exists $::as02mc04_top_ports $port]} {
+        return [dict get $::as02mc04_top_ports $port]
+    }
+
+    set obj [get_ports -quiet $port]
+    if {[llength $obj] > 0} {
+        set direction [get_property DIRECTION $obj]
+        if {$direction ne ""} {
+            return [string tolower $direction]
+        }
+    }
+    return ""
+}
+
 proc emit_port_pin_constraint {fh pins board_pin port {iostandard_mode BOARD}} {
     set props [require_board_pin $pins $board_pin]
     if {![dict exists $props loc]} {
         fail "Board pin '$board_pin' has no loc property."
     }
+    set direction [port_direction $port]
 
     puts $fh "## $port <= $board_pin"
     puts $fh "set_property PACKAGE_PIN [dict get $props loc] \[get_ports {$port}\]"
@@ -262,10 +278,10 @@ proc emit_port_pin_constraint {fh pins board_pin port {iostandard_mode BOARD}} {
         puts $fh "set_property IOSTANDARD $io \[get_ports {$port}\]"
     }
 
-    if {[dict exists $props drive]} {
+    if {$direction ne "input" && [dict exists $props drive]} {
         puts $fh "set_property DRIVE [dict get $props drive] \[get_ports {$port}\]"
     }
-    if {[dict exists $props slew]} {
+    if {$direction ne "input" && [dict exists $props slew]} {
         puts $fh "set_property SLEW [dict get $props slew] \[get_ports {$port}\]"
     }
     puts $fh ""
@@ -278,6 +294,8 @@ proc mark_emitted_board_port {emitted_ports_var board_pin port} {
 }
 
 proc emit_optional_board_port_constraint {fh pins board_pin port {iostandard_mode BOARD} emitted_ports_var} {
+    upvar 1 $emitted_ports_var emitted_ports
+
     if {![port_exists $port]} {
         puts $fh "## Skipped $board_pin => $port; top-level port does not exist in this design."
         puts $fh ""
@@ -285,7 +303,7 @@ proc emit_optional_board_port_constraint {fh pins board_pin port {iostandard_mod
     }
 
     emit_port_pin_constraint $fh $pins $board_pin $port $iostandard_mode
-    mark_emitted_board_port $emitted_ports_var $board_pin $port
+    mark_emitted_board_port emitted_ports $board_pin $port
     return 1
 }
 

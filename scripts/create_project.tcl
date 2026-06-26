@@ -49,7 +49,8 @@ if {[llength $xdc_files] > 0} {
 
 set xci_files [glob_or_empty [file join $root ip *.xci]]
 if {[llength $xci_files] > 0} {
-    add_files -fileset sources_1 $xci_files
+    import_ip -files $xci_files
+    generate_target all [get_ips]
 }
 
 update_compile_order -fileset sources_1
